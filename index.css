@@ -1,0 +1,403 @@
+:root {
+    --bg-color: #18181b; /* Zinc 900 */
+    --surface-color: #27272a; /* Zinc 800 */
+    --primary-accent-color: #f59e0b; /* Amber 500 */
+    --primary-accent-hover: #fbbf24; /* Amber 400 */
+    --text-color-primary: #e4e4e7; /* Zinc 200 */
+    --text-color-secondary: #a1a1aa; /* Zinc 400 */
+    --border-color: #3f3f46; /* Zinc 700 */
+    --danger-color: #ef4444; /* Red 500 */
+    --danger-hover: #f87171; /* Red 400 */
+    --success-color: #22c55e; /* Green 500 */
+    --success-hover: #4ade80; /* Green 400 */
+    --tool-active-bg: #3f3f46;
+    --font-family-latin: 'Roboto', sans-serif;
+    --font-family-arabic: 'Noto Naskh Arabic', serif;
+    --font-family-cursive: 'Dancing Script', cursive;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-family-latin);
+    background-color: var(--bg-color);
+    color: var(--text-color-primary);
+    line-height: 1.6;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 2rem;
+}
+
+#root {
+    width: 100%;
+    max-width: 800px;
+}
+
+.app-container {
+    background-color: var(--surface-color);
+    border-radius: 24px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--border-color);
+    padding-bottom: 2rem;
+}
+
+.language-selector {
+    display: flex;
+    justify-content: flex-end;
+    padding: 0.75rem 1.5rem 0;
+    gap: 0.5rem;
+}
+
+.language-selector button {
+    background-color: transparent;
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 0.3rem 1rem;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 0.8rem;
+    color: var(--text-color-secondary);
+    transition: all 0.3s ease-in-out;
+}
+
+.language-selector button:hover {
+    background-color: var(--border-color);
+    color: var(--text-color-primary);
+}
+
+.language-selector button.active {
+    background: linear-gradient(45deg, var(--primary-accent-color), var(--primary-accent-hover));
+    color: var(--bg-color);
+    border-color: transparent;
+    font-weight: bold;
+    box-shadow: 0 2px 10px rgba(245, 158, 11, 0.3);
+}
+
+.top-panel {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem 1.5rem;
+}
+
+header {
+    text-align: left;
+}
+
+header h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary-accent-hover);
+    font-family: var(--font-family-arabic);
+    text-shadow: 0 2px 20px rgba(251, 191, 36, 0.2);
+    letter-spacing: 1px;
+}
+
+header p {
+    font-size: 1rem;
+    color: var(--text-color-secondary);
+}
+
+main {
+    padding: 0 2rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    flex-grow: 1; /* Allows main to take up available space */
+}
+
+.mode-selector {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    background-color: var(--bg-color);
+    border-radius: 16px;
+    padding: 0.5rem;
+    border: 1px solid var(--border-color);
+}
+
+.mode-selector button {
+    padding: 0.6rem 1.5rem;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-color-secondary);
+    border-radius: 12px;
+    transition: all 0.3s ease-in-out;
+}
+
+.mode-selector button:hover {
+    background-color: var(--surface-color);
+    color: var(--text-color-primary);
+}
+
+.mode-selector button.active {
+    background: linear-gradient(45deg, var(--primary-accent-color), var(--primary-accent-hover));
+    color: var(--bg-color);
+    font-weight: bold;
+    box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+    transform: translateY(-2px);
+}
+
+.mode-selector button:nth-child(1) { font-family: var(--font-family-arabic); }
+.mode-selector button:nth-child(3) { font-family: var(--font-family-cursive); font-size: 1.1rem; }
+
+.canvas-container {
+    width: 100%;
+    flex-grow: 1; /* Makes canvas take available space */
+    min-height: 300px; /* Minimum height for smaller views */
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    touch-action: none;
+    background-color: var(--bg-color);
+    box-shadow: inset 0 4px 10px rgba(0,0,0,0.4);
+    position: relative;
+    overflow: hidden;
+    display: flex; /* Helps canvas inside to fill */
+}
+
+
+canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+canvas.pen-cursor { cursor: crosshair; }
+canvas.eraser-cursor { cursor: cell; }
+canvas.pan-cursor { cursor: grab; }
+canvas.pan-cursor.is-panning { cursor: grabbing; }
+
+
+.controls-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 0.5rem;
+    background-color: var(--bg-color);
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
+}
+
+.color-palette {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding-left: 0.5rem;
+}
+
+.color-dot {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+.color-dot:hover {
+    transform: scale(1.15);
+}
+
+.color-dot.active {
+    border-color: var(--primary-accent-hover);
+    transform: scale(1.25);
+    box-shadow: 0 0 15px rgba(251, 191, 36, 0.5);
+}
+.color-dot[style*="backgroundColor: rgb(255, 255, 255)"] {
+    border: 2px solid var(--border-color);
+}
+.color-dot[style*="backgroundColor: rgb(255, 255, 255)"].active {
+     border-color: var(--primary-accent-hover);
+}
+
+.action-buttons {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.action-button {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border-color);
+    border-radius: 50%;
+    cursor: pointer;
+    color: var(--text-color-primary);
+    transition: all 0.3s ease-in-out;
+    background-color: var(--surface-color);
+}
+.action-button i {
+    width: 22px;
+    height: 22px;
+}
+
+.action-button:hover {
+    border-color: var(--text-color-secondary);
+    color: white;
+}
+
+.clear-button:hover { background-color: var(--danger-color); border-color: var(--danger-color); box-shadow: 0 0 15px rgba(239, 68, 68, 0.5); }
+.save-button:hover { background-color: var(--success-color); border-color: var(--success-color); box-shadow: 0 0 15px rgba(34, 197, 94, 0.5); }
+
+.eraser-button:hover, .pan-button:hover {
+    border-color: var(--primary-accent-color);
+    color: var(--primary-accent-color);
+}
+
+.eraser-button.active, .pan-button.active {
+    background: linear-gradient(45deg, var(--primary-accent-color), var(--primary-accent-hover));
+    color: var(--bg-color);
+    border-color: transparent;
+    box-shadow: 0 2px 10px rgba(245, 158, 11, 0.3);
+}
+
+.zoom-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.zoom-controls input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 120px;
+    height: 6px;
+    background: var(--surface-color);
+    border-radius: 5px;
+    outline: none;
+    transition: opacity 0.2s;
+}
+
+.zoom-controls input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    background: var(--primary-accent-hover);
+    cursor: pointer;
+    border-radius: 50%;
+    border: 3px solid var(--bg-color);
+}
+
+.zoom-controls input[type="range"]::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    background: var(--primary-accent-hover);
+    cursor: pointer;
+    border-radius: 50%;
+    border: 3px solid var(--bg-color);
+}
+
+
+.navigation-controls {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    gap: 1rem;
+}
+.navigation-controls button {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 0.9rem 1rem;
+    font-size: 1rem;
+    font-weight: 500;
+    border: 1px solid var(--border-color);
+    background-color: var(--surface-color);
+    color: var(--text-color-primary);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+.navigation-controls button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    border-color: var(--primary-accent-color);
+    color: var(--primary-accent-color);
+}
+.navigation-controls button i {
+    width: 20px;
+    height: 20px;
+    color: var(--primary-accent-color);
+    transition: color 0.3s ease-in-out;
+}
+.navigation-controls button:hover i {
+    color: var(--primary-accent-hover);
+}
+
+/* RTL Styles */
+.app-container[dir="rtl"] { font-family: var(--font-family-arabic); }
+.app-container[dir="rtl"] .language-selector { justify-content: flex-start; }
+.app-container[dir="rtl"] .navigation-controls button {
+    flex-direction: row-reverse;
+}
+.app-container[dir="rtl"] .mode-selector button:nth-child(2),
+.app-container[dir="rtl"] .mode-selector button:nth-child(3) { font-family: var(--font-family-latin); }
+.app-container[dir="rtl"] .mode-selector button:nth-child(3) { font-family: var(--font-family-cursive); }
+
+.app-container[dir="rtl"] .navigation-controls button { font-family: var(--font-family-arabic); }
+.app-container[dir="rtl"] header { text-align: right; }
+
+@media (max-width: 768px) {
+    body { padding: 0; }
+    .app-container { border-radius: 0; min-height: 100vh; padding-bottom: 1rem; }
+    
+    .top-panel {
+        flex-direction: column;
+        align-items: center;
+        gap: 1.5rem;
+        padding: 1rem 1rem 1.5rem;
+    }
+
+    header {
+        text-align: center;
+    }
+
+    header h1 { font-size: 2.5rem; }
+    
+    main { padding: 0 1rem 0; }
+    
+    .mode-selector {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    
+    .controls-wrapper { 
+        flex-direction: column; 
+        border-radius: 16px; 
+        align-items: stretch; 
+    }
+    .color-palette { 
+        padding: 0.5rem 1rem; 
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    .action-buttons { justify-content: center; }
+    .zoom-controls { justify-content: center; width: 100%; padding: 0.5rem; }
+    .zoom-controls input[type="range"] { width: 40%; }
+}
+
+/* Hide desktop-specific controls on devices that primarily use touch input */
+@media (pointer: coarse), (hover: none) {
+    .desktop-only {
+        display: none;
+    }
+}
