@@ -1,10 +1,11 @@
-const CACHE_NAME = 'kitabah-cache-v4';
+const CACHE_NAME = 'kitabah-cache-v5';
 const ASSETS_TO_CACHE = [
   '/',
   'index.html',
   'index.css',
   'manifest.json',
-  'https://unpkg.com/lucide@latest'
+  'https://unpkg.com/lucide@latest',
+  'https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Noto+Naskh+Arabic:wght@400;700&family=Roboto:wght@400;500&display=swap'
 ];
 
 // Install: Pre-cache the app shell
