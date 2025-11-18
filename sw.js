@@ -1,49 +1,82 @@
-const CACHE_NAME = 'kitabah-cache-v2';
-const URLS_TO_CACHE = [
+const CACHE_NAME = 'kitabah-cache-v4';
+const ASSETS_TO_CACHE = [
   '/',
   'index.html',
   'index.css',
-  'index.tsx',
-  'manifest.json'
+  'manifest.json',
+  'https://unpkg.com/lucide@latest'
 ];
 
+// Install: Pre-cache the app shell
 self.addEventListener('install', event => {
-  // Perform install steps
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then(function(cache) {
-        console.log('Opened cache');
-        return cache.addAll(URLS_TO_CACHE);
+      .then(cache => {
+        console.log('Service Worker: Caching App Shell');
+        return cache.addAll(ASSETS_TO_CACHE);
       })
   );
 });
 
-self.addEventListener('fetch', event => {
-  event.respondWith(
-    caches.match(event.request)
-      .then(function(response) {
-        // Cache hit - return response
-        if (response) {
-          return response;
-        }
-        // If not in cache, fetch from network. This is a fallback for any unexpected requests.
-        return fetch(event.request);
-      }
-    )
-  );
-});
-
+// Activate: Clean up old caches
 self.addEventListener('activate', event => {
-  var cacheWhitelist = [CACHE_NAME];
+  const cacheWhitelist = [CACHE_NAME];
   event.waitUntil(
-    caches.keys().then(function(cacheNames) {
+    caches.keys().then(cacheNames => {
       return Promise.all(
-        cacheNames.map(function(cacheName) {
-          if (cacheWhitelist.indexOf(cacheName) === -1) {
+        cacheNames.map(cacheName => {
+          if (!cacheWhitelist.includes(cacheName)) {
+            console.log('Service Worker: Deleting old cache', cacheName);
             return caches.delete(cacheName);
           }
         })
       );
+    }).then(() => self.clients.claim())
+  );
+});
+
+// Fetch: Stale-While-Revalidate strategy
+self.addEventListener('fetch', event => {
+  // Ignore non-GET requests
+  if (event.request.method !== 'GET') {
+    return;
+  }
+
+  // For font requests, use a cache-first strategy for performance.
+  if (event.request.url.startsWith('https://fonts.gstatic.com')) {
+      event.respondWith(
+          caches.open(CACHE_NAME).then(cache => {
+              return cache.match(event.request).then(response => {
+                  return response || fetch(event.request).then(networkResponse => {
+                      cache.put(event.request, networkResponse.clone());
+                      return networkResponse;
+                  });
+              });
+          })
+      );
+      return;
+  }
+  
+  // Stale-while-revalidate for all other requests
+  event.respondWith(
+    caches.open(CACHE_NAME).then(cache => {
+      return cache.match(event.request)
+        .then(cachedResponse => {
+          const fetchPromise = fetch(event.request).then(networkResponse => {
+            // Check for valid response to cache
+            if (networkResponse && networkResponse.status === 200) {
+              cache.put(event.request, networkResponse.clone());
+            }
+            return networkResponse;
+          }).catch(err => {
+            console.error('Service Worker: Fetch failed.', err);
+            // If fetch fails (e.g., offline) and we have a cached response, the cached response is still returned.
+            // If there's no cached response either, the promise rejects, and the browser shows its offline page.
+          });
+
+          // Return cached response immediately if available, otherwise wait for network
+          return cachedResponse || fetchPromise;
+        });
     })
   );
 });

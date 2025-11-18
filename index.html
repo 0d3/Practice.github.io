@@ -11,7 +11,8 @@
     <link rel="stylesheet" href="index.css" />
     <script>
       // This script runs before React to prevent a flash of unstyled content (FOUC)
-      // and to fix the theme-related race condition.
+      // and to fix theme-related race conditions. It includes error handling
+      // for environments where localStorage is not accessible.
       (function() {
         try {
           let theme = localStorage.getItem('theme');
@@ -21,7 +22,8 @@
           }
           document.documentElement.setAttribute('data-theme', theme);
         } catch (e) {
-          // If localStorage is unavailable, default to light theme
+          // If localStorage is unavailable, default to light theme to avoid crashing.
+          console.warn('Could not access localStorage to set theme. Defaulting to light.');
           document.documentElement.setAttribute('data-theme', 'light');
         }
       })();

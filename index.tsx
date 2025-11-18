@@ -87,9 +87,9 @@ const juz29 = [
     "وَلِلَّذِينَ كَفَرُوا۟ بِرَبِّهِمْ عَذَابُ جَهَنَّمَ ۖ وَبِئْسَ ٱلْمَصِيرُ",
     "إِذَآ أُلْقُوا۟ فِيهَا سَمِعُوا۟ لَهَا شَهِيقًا وَهِىَ تَفُورُ",
     "تَكَادُ تَمَيَّزُ مِنَ ٱلْغَيْظِ ۖ كُلَّمَآ أُلْقِىَ فِيهَا فَوْجٌ سَأَلَهُمْ خَزَنَتُهَآ أَلَمْ يَأْتِكُمْ nذِيرٌ",
-    "قَالُوا۟ بَلَىٰ قَدْ جَآءَنَا نَذِيرٌ فَكَذَّبْنَا وَقُلْنَا مَا نَزَّلَ ٱللَّهُ مِن شَىْءٍ إِنْ أَنتُمْ إِلَّا فِى ضَلَٰلٍ كَبِيرٍ",
+    "قَالُوا۟ bَلَىٰ قَدْ جَآءَنَا نَذِيرٌ فَكَذَّبْنَا وَقُلْنَا مَا نَزَّلَ ٱللَّهُ مِن شَىْءٍ إِنْ أَنتُمْ إِلَّا فِى ضَلَٰلٍ كَبِيرٍ",
     "وَقَالُوا۟ لَوْ كُنَّا نَسْمَعُ أَوْ نَعْقِلُ مَا ਕُنَّا فِىٓ أَصْحَٰبِ ٱلسَّعِيرِ",
-    "فَٱعْتَرَفُوا۟ بِذَنۢبِهِمْ فَسُحْقًا لِّأَصْحَٰبِ ٱلسَّعِيرِ",
+    "فَٱعْتَرَفُوا۟ بِذَنۢbِهِمْ فَسُحْقًا لِّأَصْحَٰبِ ٱلسَّعِيرِ",
     "إِنَّ ٱلَّذِينَ يَخْشَوْنَ رَبَّهُم بِٱلْغَيْبِ لَهُم مَّغْفِرَةٌ وَأَجْرٌ كَبِيرٌ",
     "وَأَسِرُّوا۟ قَوْلَكُمْ أَوِ ٱجْهَرُوا۟ بِهِۦٓ ۖ إِنَّهُۥ عَلِيمٌۢ بِذَاتِ ٱلصُّدُورِ",
     "أَلَا يَعْلَمُ مَنْ خَلَقَ وَهُوَ ٱللَّطِيفُ ٱلْخَبِيرُ",
@@ -369,12 +369,13 @@ const App = () => {
 
     const [copyText, setCopyText] = useState(t.donation.copy);
 
+    // Register Service Worker for offline capabilities
     useEffect(() => {
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('/sw.js')
                     .then(registration => {
-                        console.log('ServiceWorker registered with scope: ', registration.scope);
+                        console.log('ServiceWorker registered successfully with scope: ', registration.scope);
                     })
                     .catch(error => {
                         console.log('ServiceWorker registration failed: ', error);
@@ -383,13 +384,13 @@ const App = () => {
         }
     }, []);
 
+    // Safely access localStorage for donation banner status
     useEffect(() => {
-        // This effect now only handles the donation banner logic on mount.
         try {
             const dismissed = localStorage.getItem('donationBannerDismissed') === 'true';
             setDonationBannerDismissed(dismissed);
         } catch (error) {
-            console.warn('Could not access localStorage for donation banner:', error);
+            console.warn('Could not access localStorage for donation banner status:', error);
         }
     }, []);
 
@@ -416,7 +417,7 @@ const App = () => {
         try {
             localStorage.setItem('donationBannerDismissed', 'true');
         } catch (error) {
-            console.error("Could not save to localStorage", error);
+            console.error("Could not save banner status to localStorage", error);
         }
     };
 
@@ -776,6 +777,7 @@ const App = () => {
         link.click();
     };
     
+    // Safely access localStorage to set theme and create icons
     useLayoutEffect(() => {
         // This effect runs synchronously after DOM mutations but before the browser paints.
         // This guarantees that the theme attribute is set before any other effects
