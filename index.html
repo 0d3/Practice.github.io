@@ -9,6 +9,23 @@
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Noto+Naskh+Arabic:wght@400;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="stylesheet" href="index.css" />
+    <script>
+      // This script runs before React to prevent a flash of unstyled content (FOUC)
+      // and to fix the theme-related race condition.
+      (function() {
+        try {
+          let theme = localStorage.getItem('theme');
+          if (!theme) {
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            theme = prefersDark ? 'dark' : 'light';
+          }
+          document.documentElement.setAttribute('data-theme', theme);
+        } catch (e) {
+          // If localStorage is unavailable, default to light theme
+          document.documentElement.setAttribute('data-theme', 'light');
+        }
+      })();
+    </script>
 <script type="importmap">
 {
   "imports": {
