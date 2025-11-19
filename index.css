@@ -429,61 +429,110 @@ canvas.pan-cursor.is-panning { cursor: grabbing; }
 }
 
 /* Donation Banner */
-@keyframes slideInUp {
-    from { transform: translate(-50%, 100%); opacity: 0; }
-    to { transform: translate(-50%, 0); opacity: 1; }
+@keyframes popIn {
+    from { transform: translate(-50%, -40%) scale(0.95); opacity: 0; }
+    to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
 }
 .donation-banner {
-    position: fixed; bottom: 2rem; left: 50%;
-    transform: translateX(-50%);
-    width: calc(100% - 4rem);
-    background-color: var(--secondary-surface-color);
-    border: 1px solid var(--border-color);
-    border-radius: 16px; padding: 1rem 1.5rem;
-    display: flex; justify-content: space-between; align-items: center;
-    gap: 1rem; z-index: 1000;
-    box-shadow: 0 -10px 30px var(--shadow-medium);
-    animation: slideInUp 0.5s ease-out forwards;
+    position: fixed; 
+    top: 50%; 
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 400px;
+    background-color: var(--surface-color);
+    border: 1px solid var(--primary-accent-color);
+    border-radius: 24px; 
+    padding: 2rem;
+    display: flex; 
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1.5rem; 
+    z-index: 1000;
+    box-shadow: 0 25px 80px var(--shadow-large);
+    animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
     transition: background-color 0.3s ease, border-color 0.3s ease;
 }
-.donation-content { display: flex; flex-direction: column; gap: 0.5rem; }
-.donation-content p { color: var(--text-color-secondary); font-size: 0.9rem; margin: 0; }
-.donation-details { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
-.donation-details span { font-weight: 500; color: var(--text-color-primary); }
+.donation-content { 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center;
+    gap: 1rem; 
+    width: 100%;
+}
+.donation-content p { 
+    color: var(--text-color-primary); 
+    font-size: 1.1rem; 
+    font-weight: 600;
+    margin: 0; 
+}
+.donation-details { 
+    display: flex; 
+    flex-direction: column;
+    align-items: center; 
+    gap: 1rem; 
+    width: 100%;
+    background-color: var(--secondary-surface-color);
+    padding: 1.25rem;
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
+}
+.donation-details span { 
+    font-weight: 700; 
+    font-size: 1.1rem;
+    color: var(--primary-accent-color); 
+    font-family: monospace;
+    letter-spacing: 0.5px;
+}
 .copy-button {
-    display: flex; align-items: center; gap: 0.5rem;
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
     background-color: var(--surface-color);
     border: 1px solid var(--border-color);
     color: var(--text-color-primary);
-    padding: 0.4rem 0.8rem; border-radius: 8px;
-    cursor: pointer; transition: all 0.2s ease;
+    padding: 0.8rem; 
+    border-radius: 12px;
+    cursor: pointer; 
+    transition: all 0.2s ease;
+    font-weight: 600;
 }
-.copy-button:hover { background-color: var(--border-color); }
-.copy-button i { width: 16px; height: 16px; }
+.copy-button:hover { 
+    border-color: var(--primary-accent-color);
+    color: var(--primary-accent-color);
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.15);
+}
+.copy-button i { width: 18px; height: 18px; }
 
 .close-banner-button {
-    background-color: var(--text-color-primary);
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background-color: transparent;
     border: none;
-    color: var(--surface-color);
+    color: var(--text-color-secondary);
     cursor: pointer;
     width: 32px;
     height: 32px;
     padding: 0;
-    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.2s ease;
-    box-shadow: 0 1px 3px var(--shadow-small);
+    transition: all 0.3s ease;
+    box-shadow: none;
 }
 .close-banner-button:hover {
     background-color: var(--danger-color);
     color: white;
-    transform: scale(1.1);
+    border-radius: 50%;
+    transform: rotate(90deg);
 }
 .close-banner-button i {
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
 }
 
 /* RTL Styles */
@@ -497,9 +546,9 @@ canvas.pan-cursor.is-panning { cursor: grabbing; }
 .app-container[dir="rtl"] .mode-selector button:nth-child(4) { font-family: var(--font-family-cursive); }
 
 .app-container[dir="rtl"] .navigation-controls button { font-family: var(--font-family-arabic); }
-.app-container[dir="rtl"] .donation-banner { text-align: right; }
-.app-container[dir="rtl"] .donation-content { align-items: flex-end; }
-.app-container[dir="rtl"] .donation-details { flex-direction: row-reverse; }
+.app-container[dir="rtl"] .donation-banner { text-align: center; align-items: center; }
+.app-container[dir="rtl"] .donation-content { align-items: center; }
+.app-container[dir="rtl"] .donation-details { flex-direction: column; align-items: center; }
 
 @media (max-width: 768px) {
     .top-bar {
@@ -536,20 +585,38 @@ canvas.pan-cursor.is-panning { cursor: grabbing; }
     .zoom-controls input[type="range"] { width: 40%; }
     
     .donation-banner {
-        bottom: 1rem; left: 1rem; right: 1rem;
-        width: auto; transform: translateX(0);
-        animation-name: none;
-        animation: fadeIn 0.5s ease-out forwards;
-        flex-direction: column; align-items: flex-start;
-        padding: 1rem;
+        bottom: auto; 
+        left: 50%; 
+        right: auto;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 85%; 
+        animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        flex-direction: column; 
+        align-items: center;
+        padding: 2rem 1.5rem;
     }
     .donation-details {
-        flex-direction: column; align-items: flex-start; gap: 0.75rem;
+        flex-direction: column; 
+        align-items: center; 
+        gap: 1rem;
     }
-    .close-banner-button { position: absolute; top: 0.5rem; right: 0.5rem; }
-    .app-container[dir="rtl"] .donation-banner { align-items: flex-end; }
-    .app-container[dir="rtl"] .donation-details { align-items: flex-end; }
-    .app-container[dir="rtl"] .close-banner-button { right: auto; left: 0.5rem; }
+    .close-banner-button { 
+        position: absolute; 
+        top: 16px; 
+        right: 16px; 
+    }
+    .app-container[dir="rtl"] .donation-banner { 
+        align-items: center; 
+        text-align: center;
+    }
+    .app-container[dir="rtl"] .donation-details { 
+        align-items: center; 
+    }
+    .app-container[dir="rtl"] .close-banner-button { 
+        right: auto; 
+        left: 16px; 
+    }
 }
 
 /* Hide desktop-specific controls on devices that primarily use touch input */
